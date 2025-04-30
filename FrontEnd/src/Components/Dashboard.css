@@ -1,0 +1,80 @@
+/* Dashboard Container */
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #f1f1f1, #e0e0e0);
+  animation: fadeIn 1s ease-out;
+}
+
+/* Dashboard Card */
+.dashboard-card {
+  background-color: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  animation: slideIn 0.7s ease-out;
+}
+
+.greeting {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.dashboard-info {
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 2rem;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Button Styling */
+.navigate-btn, .logout-btn, .add-product-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin: 10px 0;
+}
+
+/* Hover Effects for Buttons */
+.navigate-btn:hover, .logout-btn:hover, .add-product-btn:hover {
+  background-color: #45a049;
+  transform: translateY(-5px);
+}
+
+/* Button Containers */
+.navigate-btn-container, .logout-btn-container {
+  margin-bottom: 20px;
+}
+
+/* Fade-In Animation for Buttons */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Slide-In Animation for Dashboard Card */
+@keyframes slideIn {
+  0% {
+    transform: translateY(-50px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
