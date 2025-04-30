@@ -42,9 +42,9 @@
     console.log('Received data:', req.body); // Log the received data
 
     // Check if captcha exists
-    if (!captcha) {
-      return res.status(400).json({ message: 'Captcha verification failed' });
-    }
+    // if (!captcha) {
+    //   return res.status(400).json({ message: 'Captcha verification failed' });
+    // }
 
     try {
       // Verify CAPTCHA with Google's reCAPTCHA API
@@ -59,10 +59,10 @@
         }
       );
 
-      // If CAPTCHA verification fails
-      if (!response.data.success) {
-        return res.status(400).json({ message: 'Captcha verification failed' });
-      }
+      // // If CAPTCHA verification fails
+      // if (!response.data.success) {
+      //   return res.status(400).json({ message: 'Captcha verification failed' });
+      // }
 
       // Check if the user already exists
       db.query('SELECT * FROM employee WHERE Email = ?', [email], async (err, results) => {
@@ -72,7 +72,9 @@
         }
 
         if (results.length > 0) {
-          return res.status(400).send('User already exists');
+          console.log(results.length, 'results');
+          
+          return res.status(409).send('User already exists');
         }
 
         // Hash the password using bcrypt
@@ -88,8 +90,8 @@
         });
       });
     } catch (error) {
-      console.error('Error during CAPTCHA verification:', error);
-      res.status(500).json({ message: 'Server error during CAPTCHA verification' });
+      // console.error('Error during CAPTCHA verification:', error);
+      // res.status(500).json({ message: 'Server error during CAPTCHA verification' });
     }
   });
   app.post('/login', async (req, res) => {

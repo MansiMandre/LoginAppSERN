@@ -26,7 +26,7 @@ const Signup = () => {
       const response = await axios.post('http://localhost:3001/register', {
         email,
         password,
-        captcha: captchaValue, // Send the captcha response along with the form data
+         captcha: captchaValue, // Send the captcha response along with the form data
       });
 
       console.log('Response from server:', response); // Log the server response
@@ -35,11 +35,15 @@ const Signup = () => {
         console.log('Signup successful, redirecting to login');
         navigate('/login'); // Navigate to login after successful signup
       } else {
-        setError('Signup failed. Please try again.'); // Handle failure case
+        setError('This email is already registered'); // Handle failure case
       }
     } catch (err) {
       console.error('Error during signup:', err); // Log the error for debugging
-      setError('Signup failed. Please try again.'); // Display error message
+      if (err.response?.status === 409) {
+        setError('This email is already registered');
+      } else {
+        setError('Signup failed. Please try again.');
+      }
     } finally {
       setLoading(false); // Set loading to false after the request is complete
     }
