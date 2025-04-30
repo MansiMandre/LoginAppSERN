@@ -26,12 +26,12 @@ const EditProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(product,'product');
+    
 
     
     // let { id, product } = product;
     try {
-      await axios.post(`http://localhost:3001/productedit/${id}`, {
+      await axios.put(`http://localhost:3001/productedit/${id}`, {
        
        ...product,
       });

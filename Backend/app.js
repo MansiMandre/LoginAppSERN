@@ -187,12 +187,13 @@
       }
     })
     //Edit the product
-    app.post('/productedit/:id', (req, res) => {
+    app.put('/productedit/:id', (req, res) => {
       console.log('hiii');
       console.log(req,'reeeeq')
      const  id  = req.params.id;
-      const  name  = req.body.name;
-      const  price  = req.body.price;
+      const  {name,price}  = req.body;
+     console.log(name,price,'name and price');
+     
       
     
     
