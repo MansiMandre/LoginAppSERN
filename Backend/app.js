@@ -7,6 +7,7 @@
   const mysql = require('mysql2'); // MySQL library
   const axios = require('axios'); // Axios for HTTP requests
   require('dotenv').config(); // To load environment variables
+ 
 
   const app = express();
   const PORT = 3001; // Your backend server port
@@ -29,13 +30,11 @@
   });
 
   // CORS configuration to allow frontend requests
-  app.use(cors({
-    origin: 'http://localhost:3000', // Update with your frontend URL
-    methods: ['GET', 'POST', 'OPTIONS']
-  }));
+  app.use(cors());
 
   app.use(bodyParser.json()); // To parse JSON in request bodies
-
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(express.json()); // This must be declared before your routes
   // Register Route
   app.post('/register', async (req, res) => {
     const { email, password, captcha } = req.body;
@@ -154,6 +153,23 @@
         res.status(201).send('Product added successfully')
       }
     )})
+    app.get('/editproduct/:id', (req, res) => {
+      const { id } = req.params;
+    
+      db.query('SELECT * FROM products WHERE id = ?', [id], (err, results) => {
+        if (err) {
+          console.error('Database error:', err);
+          return res.status(500).send('Server error');
+        }
+    
+        if (results.length === 0) {
+          return res.status(404).send('Product not found');
+        }
+    
+        res.json(results[0]); // Return the found product
+      });
+    });
+    
     //Delete the product
     app.delete('/product/:id',async(req,res)=>{
       const {id}=req.params
@@ -171,31 +187,37 @@
       }
     })
     //Edit the product
-    app.post('/editproduct/:id',async(req,res)=>{
-      console.log(req,"params")
-      const {id}=req.params
-      const {name, price}=req.body
-      if(!name || !price){
-        return res.status(400).send('Please provide all required fields')
+    app.post('/productedit/:id', (req, res) => {
+      console.log('hiii');
+      console.log(req,'reeeeq')
+     const  id  = req.params.id;
+      const  name  = req.body.name;
+      const  price  = req.body.price;
+      
+    
+    
+      if (!name || !price) {
+        return res.status(400).send('Please provide all required fields');
       }
-      console.log(name,price)
-      try{
-        const result = await db.query(
-          'UPDATE products SET name = ?, price = ? WHERE id = ?',
-          [name, price, id]
-        );
-        
-        if(result.affectedRows===0){
-          return res.status(404).send('Product not found')
-        }else{
-          return res.status(200).send('Product updated successfully')
+    
+      db.query(
+        'UPDATE products SET name = ?, price = ? WHERE id = ?',
+        [name, price, id],
+        (err, result) => {
+          if (err) {
+            console.error('Database error:', err);
+            return res.status(500).send('Server error');
+          }
+    
+          if (result.affectedRows === 0) {
+            return res.status(404).send('Product not found');
+          }
+    
+          return res.status(200).send('Product updated successfully');
         }
-
-      }catch(err){
-        console.error('Database error:', err);
-        return res.status(500).send('Server error');
-      }
-    })
+      );
+    });
+    
   // Start the server
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
