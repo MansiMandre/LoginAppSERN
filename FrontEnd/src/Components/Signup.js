@@ -48,16 +48,21 @@ const Signup = () => {
   };
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center flex items-center justify-center relative"
-      style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1723384747376-90f201a3bd55?q=80&w=1542&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
-      }}
-    >
+    <div className="min-h-screen flex items-center justify-center relative">
+      {/* Video Background */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        src="https://media.istockphoto.com/id/2070837460/video/flight-through-the-clouds.mp4?s=mp4-640x640-is&k=20&c=UE3NV8MheV-idcaQEkd3XqmRecUx9qQFxnoCZKhHjUk=" // Replace with your video path
+        type="video/mp4"
+        autoPlay
+        loop
+        muted
+      />
+
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/50 to-blue-600/20 z-0"></div>
 
+      {/* Signup Form */}
       <motion.div
         className="relative z-10 bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl px-10 py-12 max-w-md w-full"
         initial={{ y: 50, opacity: 0 }}

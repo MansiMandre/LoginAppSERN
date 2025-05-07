@@ -37,12 +37,17 @@ const Dashboard = () => {
   const handleAddProduct = () => navigate('/addproduct');
 
   return (
-    <div
-      className="min-h-screen flex flex-col bg-cover bg-center relative"
-      style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1920&q=80')",
-      }}
-    >
+    <div className="min-h-screen flex flex-col relative">
+      {/* Video Background */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        src="https://cdn.pixabay.com/video/2020/04/07/35264-407130725_large.mp4" // Replace with your video path
+        type="video/mp4"
+        autoPlay
+        loop
+        muted
+      />
+
       {/* Overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 

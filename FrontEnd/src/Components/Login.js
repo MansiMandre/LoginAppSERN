@@ -48,16 +48,21 @@ const Login = () => {
   };
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center flex items-center justify-center relative"
-      style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1631631480669-535cc43f2327?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
-      }}
-    >
+    <div className="min-h-screen flex items-center justify-center relative">
+      {/* Video Background */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        src="https://cdn.pixabay.com/video/2024/08/30/228847_large.mp4" // Replace with your video URL
+        type="video/mp4"
+        autoPlay
+        loop
+        muted
+      />
+
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/60 to-blue-800/30 z-0"></div>
 
+      {/* Login Form */}
       <motion.div
         className="relative z-10 bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl px-10 py-12 max-w-md w-full"
         initial={{ y: 50, opacity: 0 }}
