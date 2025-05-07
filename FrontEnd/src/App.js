@@ -11,6 +11,7 @@ import ProductList from './Components/ProductsList';
 import AddProductForm from './Components/AddProductForm';
 import EditProduct from './Components/EditProduct';
 
+
 // Axios request interceptor to add the token to the headers
 axios.interceptors.request.use(
   (config) => { console.log('API Request:', config);
@@ -36,8 +37,9 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/product" element={<ProductList />} />
-          <Route path="/add-product" element={<AddProductForm />} />
+          <Route path="/addproduct" element={<AddProductForm />} />
           <Route path="/edit-product/:id" element={<EditProduct/>} />
+        
 
 
         </Routes>

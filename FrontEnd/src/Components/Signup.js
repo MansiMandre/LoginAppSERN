@@ -1,104 +1,123 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ReCAPTCHA from 'react-google-recaptcha'; // Import reCAPTCHA component
+import ReCAPTCHA from 'react-google-recaptcha';
+import { motion } from 'framer-motion';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [captchaValue, setCaptchaValue] = useState(null); // Store captcha response
+  const [showPassword, setShowPassword] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState(null);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state for the button
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
-    // Check if CAPTCHA is completed
     if (!captchaValue) {
       setError('Please verify that you are human.');
       return;
     }
 
-    setLoading(true); // Set loading to true while the request is in progress
-
+    setLoading(true);
     try {
       const response = await axios.post('http://localhost:3001/register', {
         email,
         password,
-         captcha: captchaValue, // Send the captcha response along with the form data
+        captcha: captchaValue,
       });
 
-      console.log('Response from server:', response); // Log the server response
-
       if (response.status === 201) {
-        console.log('Signup successful, redirecting to login');
-        navigate('/login'); // Navigate to login after successful signup
+        navigate('/login');
       } else {
-        setError('This email is already registered'); // Handle failure case
+        setError('This email is already registered');
       }
     } catch (err) {
-      console.error('Error during signup:', err); // Log the error for debugging
       if (err.response?.status === 409) {
         setError('This email is already registered');
       } else {
         setError('Signup failed. Please try again.');
       }
     } finally {
-      setLoading(false); // Set loading to false after the request is complete
+      setLoading(false);
     }
   };
 
-  const handleCaptchaChange = (value) => {
-    console.log('Captcha value:', value); // Log the captcha value
-    setCaptchaValue(value); // Set captcha response from reCAPTCHA
-  };
-
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-4">Signup</h2>
+    <div
+      className="min-h-screen bg-cover bg-center flex items-center justify-center relative"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1723384747376-90f201a3bd55?q=80&w=1542&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/50 to-blue-600/20 z-0"></div>
+
+      <motion.div
+        className="relative z-10 bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl px-10 py-12 max-w-md w-full"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h2 className="text-4xl font-bold text-center text-blue-800 mb-6">Create Account</h2>
+
         <form onSubmit={handleSignup}>
-          <div className="mb-4">
+          <div className="mb-5">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               required
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
-          <div className="mb-4">
+
+          <div className="mb-6 relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               required
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 pr-12 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
+            <div
+              onClick={togglePasswordVisibility}
+              className="absolute right-4 top-4 text-gray-500 hover:text-blue-600 cursor-pointer"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
           </div>
 
-          {/* Add reCAPTCHA */}
-          <div className="mb-4">
+          <div className="mb-6">
             <ReCAPTCHA
-              sitekey="6LdnSycrAAAAAMouYN_TxyO-57vrZHiZ7jALjuK2" // Replace with your Google reCAPTCHA site key
-              onChange={handleCaptchaChange}
+              sitekey="6LdnSycrAAAAAMouYN_TxyO-57vrZHiZ7jALjuK2"
+              onChange={(value) => setCaptchaValue(value)}
             />
           </div>
 
-          {error && <p className="text-red-500 text-center mt-4">{error}</p>}
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
           <button
             type="submit"
-            disabled={loading} // Disable the button while loading
-            className="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={loading}
+            className="w-full py-3 bg-blue-600 text-white rounded-md text-lg font-semibold hover:bg-blue-700 transition duration-300"
           >
             {loading ? 'Signing up...' : 'Signup'}
           </button>
         </form>
-      </div>
+
+        <div className="mt-6 text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <a href="/login" className="text-blue-600 hover:underline">Login</a>
+        </div>
+      </motion.div>
     </div>
   );
 };

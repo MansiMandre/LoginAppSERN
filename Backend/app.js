@@ -18,7 +18,7 @@
     user: 'root',        // MySQL username (update if needed)
     password: '',        // MySQL password (update if needed)
     database: 'testdb'   // Your MySQL database name
-  });
+  })
 
   // Connect to the MySQL database
   db.connect((err) => {
@@ -171,10 +171,12 @@
     });
     
     //Delete the product
-    app.delete('/product/:id',async(req,res)=>{
+    app.delete('/productdel/:id',async(req,res)=>{
       const {id}=req.params
       try{
-        const result=await db.query('DELETE FROM products WHERE id=?',[id])
+        const result= db.query('DELETE FROM products WHERE id=?',[id])
+        console.log(result,'result');
+        
         if(result.affectedRows===0){
           return res.status(404).send('Product not found')
         }else{
@@ -192,10 +194,6 @@
       console.log(req,'reeeeq')
      const  id  = req.params.id;
       const  {name,price}  = req.body;
-     console.log(name,price,'name and price');
-     
-      
-    
     
       if (!name || !price) {
         return res.status(400).send('Please provide all required fields');

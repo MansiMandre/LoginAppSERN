@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EditProductForm = () => {
   const [product, setProduct] = useState(null);
   const [error, setError] = useState('');
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -26,16 +27,12 @@ const EditProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-
-    
-    // let { id, product } = product;
     try {
       await axios.put(`http://localhost:3001/productedit/${id}`, {
-       
-       ...product,
+        ...product,
       });
       alert('Product updated successfully');
+      navigate('/product'); // Redirect to product list
     } catch (err) {
       setError('Failed to update product');
     }
@@ -44,7 +41,35 @@ const EditProductForm = () => {
   if (error) return <p className="text-center text-red-600 mt-8">{error}</p>;
 
   return product ? (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+    <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 px-4 pt-28">
+      {/* Navbar */}
+      <nav className="w-full bg-white shadow-md py-4 px-6 fixed top-0 left-0 z-10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <h1 className="text-xl font-bold text-gray-800">Product Manager</h1>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="text-gray-700 hover:text-blue-600 font-medium transition"
+            >
+              Home
+            </button>
+            <button
+              onClick={() => navigate('/product')}
+              className="text-gray-700 hover:text-blue-600 font-medium transition"
+            >
+              Product List
+            </button>
+            <button
+              onClick={() => navigate('/addproduct')}
+              className="text-gray-700 hover:text-blue-600 font-medium transition"
+            >
+              Add Product
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Form */}
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-xl shadow-lg w-full max-w-xl"
@@ -101,6 +126,16 @@ const EditProductForm = () => {
           />
         </div>
 
+        {/* Back Button */}
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="w-full mb-4 bg-gray-300 text-gray-800 py-3 rounded-md hover:bg-gray-400 transition"
+        >
+          Back
+        </button>
+
+        {/* Save Button */}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition"
